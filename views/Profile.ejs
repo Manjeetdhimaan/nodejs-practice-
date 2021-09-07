@@ -1,8 +1,14 @@
 <html>
     <head>
-        <title>Home Page</title>
+        <title>Profile Page</title>
     </head>
     <body>
-        <h1>Home Page</h1>
+<%-include('common/nav')-%>
+
+        <h1>Welcome! Mr <%=name%></h1>
+        <h3>Email: <%=data.email%></h3>
+        <ul> <%data.skills.forEach(function(item){%>
+            <li><%=item%></li>
+       <% })%></ul>
     </body>
 </html>

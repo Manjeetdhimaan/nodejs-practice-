@@ -1,41 +1,56 @@
 const express = require('express');
-
 const app = express();
+const mongoose = require('mongoose');
+const User = require('./users')
+// myFirstDatabase
+mongoose.connect('mongodb+srv://mani:mfhvOaeYeQXP60Oz@cluster0.14vpn.mongodb.net/nodeJs?retryWrites=true&w=majority', 
+{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+}
+)
 
-var bodyParser = require('body-parser');
-var encoder = bodyParser.urlencoded();
-app.use('/assests', express.static('assests'))
-app.set('view engine', 'ejs')
-app.get('/profile/:name', function(req, res){
-    data={email:'test@test.com', address:'mohali', skills:['javascript', 'angular', 'git', 'react']}
-   res.render('Profile', {name:req.params.name, data:data})
-   console.log(req.params.name)
-})
-
-app.get('/', function(req, res){
-res.render('Home')
-})
-app.post('/login',encoder,  function(req, res){
-    console.log(req.body.email)
-    res.render('home')
-    })
-
-app.get('/login', function(req, res){
-res.render('login')
-})
-app.listen(3000, function () {
-    console.log("Express server listening on port 3000");
+User.find({}, function(err, users){
+    if(err)console.log(err);
+    console.log(users)
 })
 
 
 
 
+// basic node login form and rendering files with nodejs
+
+// const express = require('express');
+
+// const app = express();
+
+// var bodyParser = require('body-parser');
+// var encoder = bodyParser.urlencoded();
+// app.use('/assests', express.static('assests'))
+// app.set('view engine', 'ejs')
+// app.get('/profile/:name', function(req, res){
+//     data={email:'test@test.com', address:'mohali', skills:['javascript', 'angular', 'git', 'react']}
+//    res.render('Profile', {name:req.params.name, data:data})
+//    console.log(req.params.name)
+// })
+
+// app.get('/', function(req, res){
+// res.render('Home')
+// })
+// app.post('/login',encoder,  function(req, res){
+//     console.log(req.body.email)
+//     res.render('home')
+//     })
+
+// app.get('/login', function(req, res){
+// res.render('login')
+// })
+// app.listen(3000, function () {
+//     console.log("Express server listening on port 3000");
+// })
 
 
-
-
-
-
+// 
 
 
 

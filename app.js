@@ -1,19 +1,62 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const User = require('./users')
-// myFirstDatabase
+const User = require('./models/users');
+ var bodyParser = require('body-parser');
+ var jsonParser = bodyParser.json();
+
 mongoose.connect('mongodb+srv://mani:mfhvOaeYeQXP60Oz@cluster0.14vpn.mongodb.net/nodeJs?retryWrites=true&w=majority', 
 {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }
-)
+);
 
-User.find({}, function(err, users){
-    if(err)console.log(err);
-    console.log(users)
+app.get('/users', function(req, res){
+  User.find().select('email').then((data)=>{
+      res.json(data)
+  })
 })
+
+app.post('/users', jsonParser, function(req, res){
+    res.end('Post api will be here!')
+})
+
+app.listen(3000, function(){
+    console.log('listening port:3000')
+})
+
+// const data = new User({
+//     _id: new mongoose.Types.ObjectId(),
+//     name:'sukhraas',
+//     email:'sukhraas@test.com',
+//     address:'Patiala'
+// });
+
+// data.save().then((result) => {
+//     console.log(result)
+// }).catch((err)=>console.log(err))
+
+
+
+// connected with mongodb and created a model.
+
+// const express = require('express');
+// const app = express();
+// const mongoose = require('mongoose');
+// const User = require('./users')
+// // myFirstDatabase
+// mongoose.connect('mongodb+srv://mani:mfhvOaeYeQXP60Oz@cluster0.14vpn.mongodb.net/nodeJs?retryWrites=true&w=majority', 
+// {
+//     useNewUrlParser:true,
+//     useUnifiedTopology:true
+// }
+// )
+
+// User.find({}, function(err, users){
+//     if(err)console.log(err);
+//     console.log(users)
+// })
 
 
 

@@ -2,27 +2,61 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const User = require('./models/users');
- var bodyParser = require('body-parser');
- var jsonParser = bodyParser.json();
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 
-mongoose.connect('mongodb+srv://mani:mfhvOaeYeQXP60Oz@cluster0.14vpn.mongodb.net/nodeJs?retryWrites=true&w=majority', 
-{
-    useNewUrlParser:true,
-    useUnifiedTopology:true
-}
+mongoose.connect('mongodb+srv://mani:mfhvOaeYeQXP60Oz@cluster0.14vpn.mongodb.net/nodeJs?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
 );
 
-app.get('/users', function(req, res){
-  User.find().select('email').then((data)=>{
-      res.json(data)
-  })
+app.get('/users', function (req, res) {
+    User.find().select('email').then((data) => {
+        res.json(data)
+    })
 })
 
-app.post('/users', jsonParser, function(req, res){
-    res.end('Post api will be here!')
+app.post('/user', jsonParser, function (req, res) {
+    const data = new User({
+        _id: new mongoose.Types.ObjectId(),
+        name: req.body.name,
+        email: req.body.email,
+        address: req.body.address
+    })
+
+    data.save().then((result) => {
+        res.json(result)
+    }).catch((err) => console.log(err))
 })
 
-app.listen(3000, function(){
+app.delete('/user/:id', function (req, res) {
+    User.deleteOne({ _id: req.params.id }).then((result) => {
+        res.json(result)
+    }).catch((err) => console.log(err))
+})
+
+app.put('/user/:id',jsonParser,  function(req, res){
+User.updateOne(
+    {_id:req.params.id},
+     {$set:{name:req.body.name,
+            email:req.body.email,
+            address:req.body.address
+            }
+    }
+     ).then((result)=>{
+         res.json(result)   
+     }).catch((err)=>console.log(err));
+})
+
+app.get('/search/:name', function(req, res){
+    var regex = new RegExp(req.params.name, 'i');
+    User.find({name:regex}).then((result)=> {
+        res.json(result)
+    })
+})
+app.listen(3000, function () {
     console.log('listening port:3000')
 })
 
@@ -125,8 +159,8 @@ app.listen(3000, function(){
 // app.listen(3000, function () {
 //     console.log("Express server listening on port 3000");
 //     });
-  
-    
+
+
 
 
 
